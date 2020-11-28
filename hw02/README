@@ -1,0 +1,26 @@
+Author Info and Misc
+------
+我的名字是吳文元，學號是40947030S
+
+Build
+------
+run `make` to build this homework, all executable will be compiled.
+BTW, the Makefile is extremely compact and FABULOUS. Please check it out. >.<
+
+Run
+-------
+All executable accept no argument and can simply run in linux with GLIBC_2.3.4.
+
+hw0204
+-------
+Input should be provided as YYYY/MM/DD
+end date is earlier than start date is accepted, and will output negative diff day.
+B.C is not supported as input.
+
+hw0205
+-------
+input cards should be formatted as 
+• 1-13: ♠ Ace to King.
+• 14-26: ♡ Ace to King.
+• 27-39: ♢ Ace to King.
+• 40-52: ♣ Ace to King.

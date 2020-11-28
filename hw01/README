@@ -1,0 +1,27 @@
+Author Info and Misc
+------
+我的名字是吳文元，學號是40947030S
+writing assignment在writing.pdf裡面
+
+Build
+------
+run `make` to build this homework, all executable will be compiled.
+BTW, the Makefile is extremely compact and FABULOUS. Please check it out. >.<
+
+Run
+-------
+All executable accept no argument and can simply run in linux with GLIBC_2.3.4.
+
+hw0102
+-------
+5 input digit should NOT be seperated by space.
+
+hw0103
+-------
+Input float point number is acceptable. (As long as double is able to store it.)
+Output precision is theoretically 350 digit after period if needed.
+
+hw0105
+-------
+Any input that fits signed 32 bit integer will be accepted.
+If output number had less than 8 digit, will output 0 as padding.

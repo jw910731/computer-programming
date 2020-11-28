@@ -1,0 +1,29 @@
+Author Info and Misc
+------
+我的名字是吳文元，學號是40947030S
+我是來師大競程隊伍NTNU_import_magic的一員
+
+Build
+------
+run `make` to build this homework, all executable will be compiled.
+BTW, the Makefile is extremely compact and FABULOUS. Please check it out. >.<
+
+Also, `make clean` is supported.
+
+Run
+-------
+All executable accept no argument and can simply run in linux with GLIBC_2.3.4.
+
+hw0402
+-------
+Please note that recusive version and the iterative version uses the same header file and link different implementation in linker stage. If this confuses you, you may ask Professor Chi for help or use `objdump -d hw0402-{1,2}` to see the implementation of the program in assembly.
+
+This kind of design isn't intended to make troubles but showing the ability of header file that is capable to create abstraction layer for subroutine and hiding it's implementation and make it easy to replace in needed.
+
+hw0405
+-------
+It look like a normal Bulls and Cows game in the first sight. But there's easter eggs inside of it and waiting for you to discover. There's a hint for one of the easter egg in this readme. The others may need you to hate someone or pray to the god.
+
+BTW, when you trigger the easter egg. The text will become randomly COLORFUL to let you know you had discovered an easter egg.
+
+It's okay to open the source and find for the easter egg. It's not that hard to find it!
