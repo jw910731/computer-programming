@@ -1,0 +1,13 @@
+老師你的課真的蠻好玩的，可以讓激勵我研究奇怪的東西
+之前你下的uint1024_t戰帖，我已經快要完成了
+
+下面是來自/dev/random隨機之美總共116byte的力量
+2e90 cd3d c778 8dd2 9103 1254 9460 ed77
+002c a5d3 cf57 91ec ec1d 37e2 f65b 8d36
+7cd5 8279 ac48 968d f19a f9bc 5258 2b29
+6ec0 e76e 0d51 e451 79c9 4187 63ab aa4f
+40d1 b28d 5c69 aac1 18ab fbc4 ec71 e6df
+6293 6d40 f57d ac35 fe8e 2019 8f05 c7a4
+0eea af55 4fc6 6a3d 8178 165b 4d90 2a4f
+089f 8b87
+我當然有讓它美美的阿，直接噴Byte太醜了XDD
