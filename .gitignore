@@ -1,4 +1,7 @@
 ## C
+# gdb & peda
+peda-*.txt
+.gdb*
 # Prerequisites
 *.d
 
@@ -95,3 +98,10 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+## VS Code
+.vscode/*
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
