@@ -1,7 +1,13 @@
-#pragma once 
+#pragma once
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+
+#ifdef DEBUG
+#define debug(...) printf(__VA_ARGS__)
+#else
+#define debug(...) (void)0
+#endif
 
 typedef int32_t i32;
 typedef int64_t i64;
