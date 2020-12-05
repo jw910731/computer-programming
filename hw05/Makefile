@@ -14,8 +14,8 @@ hw0505_OBJ=hw0505.o basic.o minesweeper.o terminal.o
 all: CFLAGS:=$(CFLAGS) -O2 
 all: $(TARGETS) 
 
-dev: CFLAGS:=$(CFLAGS) -g -DDEBUG -fsanitize=leak -fsanitize=undefined -fsanitize=address
-dev: LDFLAGS:=$(LDFLAGS) -lubsan -lasan
+dev: CFLAGS:=$(CFLAGS) -g -DDEBUG -fsanitize=leak -fsanitize=undefined
+dev: LDFLAGS:=$(LDFLAGS) -fsanitize=address -lubsan -lasan 
 dev: $(TARGETS)
 
 .SECONDEXPANSION:

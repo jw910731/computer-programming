@@ -27,7 +27,6 @@ int main() {
     }
     deg1 = tidyPoly(poly1, deg1);
     deg2 = tidyPoly(poly2, deg2);
-    debug("%ld %ld\n", deg1, deg2);
     printf("p1: ");
     printPolynominal(poly1, deg1);
     putchar('\n');
