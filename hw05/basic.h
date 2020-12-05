@@ -9,6 +9,7 @@
 #define debug(...) (void)0
 #endif
 
+typedef uint8_t byte;
 typedef int32_t i32;
 typedef int64_t i64;
 typedef double fp;
