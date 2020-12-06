@@ -145,9 +145,15 @@ void game(){
         listen(&context.listener);
         bool ck = game_check(g_game);
         if(g_game->end){
+            reveal_all(g_game);
+            fputs(CLEAR_TERMINAL, stdout);
+            print_game(g_game);
             printf(CLR_RED"You had revealed the mine. >.<\n"CLR_RST);
         }
         if(ck){
+            reveal_all(g_game);
+            fputs(CLEAR_TERMINAL, stdout);
+            print_game(g_game);
             printf(CLR_LGRN"You had reveal the entire field without touching any mine!\nYou Win!"CLR_RST);
             break;
         }

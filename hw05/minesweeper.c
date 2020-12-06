@@ -83,14 +83,18 @@ void print_game(Game *g){
                     putchar('0'+NUM(d));
                 }
                 else if(MINE(d)){
+                    fputs(CLR_LRED, stdout);
                     putchar('X');
+                    fputs(CLR_RST, stdout);
                 }
                 else{
                     putchar(' ');
                 }
             }
             else if (FLAG(d)){
+                fputs(CLR_LCYN, stdout);
                 putchar('F');
+                fputs(CLR_RST, stdout);
             }
             else{
                 putchar('*');
@@ -104,8 +108,8 @@ void reveal_all(Game *g){
     for(i32 i = 0 ; i < g->h ; ++i){ // y
         for(i32 j = 0 ; j < g->w ; ++j){ // x
             uint32_t d = g->data[i][j];
-            if(!LIT(d)){
-                g->data[i][j] |= (1>>5);
+            if(MINE(d)){
+                g->data[i][j] |= (1<<5);
             }
         }
     }
