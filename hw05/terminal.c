@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
 #include <signal.h>
 
@@ -36,10 +34,10 @@ void switchMouseTrack(bool stat){
         printf("\e[?1003h");
     }
     else{
-        tcflush(g_context->ttyFd, TCIFLUSH);
-        tcsetattr(g_context->ttyFd, TCSANOW, &g_context->oldOpt);   
         // disable mouse tracking
-        printf("\033c\e[?1003l");
+        printf("\e[?1003l");
+        tcflush(g_context->ttyFd, TCIFLUSH);  
+        tcsetattr(g_context->ttyFd, TCSANOW, &g_context->oldOpt);
     }
 }
 
@@ -69,6 +67,7 @@ void listen(ClickListener *clickListener){
     static const char target[] = "\e[";
     static const size_t tsize = 2;
     i32 counter = 0;
+    switchMouseTrack(true);
     while(1){
         byte c;
         c = getchar() & ((1<<9)-1);
@@ -82,18 +81,30 @@ void listen(ClickListener *clickListener){
                     byte cb = getchar() & ((1<<9)-1);
                     byte cx = getchar() & ((1<<9)-1);
                     byte cy = getchar() & ((1<<9)-1);
-                    if(cb & (1<<6)){
+                    if(cb & (1<<6) && clickListener->motion != NULL){
+                        switchMouseTrack(false);
                         clickListener->motion(cb, cx, cy);
+                        switchMouseTrack(true);
                     }
-                    else if(cb & (1<<5)){
+                    else if(cb & (1<<5) && clickListener->click != NULL){
+                        switchMouseTrack(false);
                         clickListener->click(cb, cx, cy);
+                        switchMouseTrack(true);
                     }
-                    if(clickListener->isTerminate(cb)){
+                    // check if is goint to terminate
+                    if(clickListener->isTerminate(cb, cx, cy)){
+                        switchMouseTrack(false);
                         break;
                     }
                 }
             }
+            if(!counter && c == 'q'){
+                switchMouseTrack(false);
+                printf("See You Next Time...\n");
+                exit(0);
+            }
             counter = 0;
         }
     }
+    switchMouseTrack(false);
 }
