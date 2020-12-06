@@ -1,0 +1,37 @@
+Author Info and Misc
+------
+我的名字是吳文元，學號是40947030S
+
+Build
+------
+run `make` to build this homework, all executable will be compiled.
+BTW, the Makefile is extremely compact and FABULOUS. Please check it out. >.<
+
+Also, `make clean` is supported.
+
+Run
+-------
+All executable accept no argument and can simply run in POSIX supported systems. 
+hw0505 had more requirements for environment, see hw0505.
+
+hw0501 & hw0502
+-------
+test.h & test2.h must be provided in the same dir as makefile. Otherwise `make dev` or `make debug` may be used.
+
+hw0505
+-------
+This minesweeper game is interactive through MOUSE CLICK!
+You must run this in Linux system and the terminal should support xterm mouse event and shall not redirect stdin or stdout, otherwise an error is given through stderr and the program will be terminated.
+Left click reveals the block. Right click to place a flag, right click again to remove the flag.
+You must not drag, a drag mouse event will be ignored.
+The ^C will not send SIGINT to terminal when recieving mouse event, if you would like to quit game immediately you should use `q` instead.
+
+Cheetsheets
+===========
+Left click : reveal
+Right click: flag
+Q          : quit the game
+
+Big special thanks to Gnome mine, for being a reference while developing.
+Also thanks to this website :https://shyuanliang.blogspot.com/2010/09/
+for giving me a lot of help in understanding <termios.h> !
