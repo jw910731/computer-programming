@@ -63,9 +63,21 @@ void init_game(Game* game){
 }
 
 void print_game(Game *g){
+    i32 fmt_cnt = 3;
+    fputs("    ", stdout);
+    for(i32 i = 0 ; i < g->w ; ++i){
+        fmt_cnt += printf("%02d ", i+1);
+    }
+    putchar('\n');
+    for(i32 i = 0 ; i <= fmt_cnt ; ++i){
+        putchar('-');
+    }
+    putchar('\n');
     for(i32 i = 0 ; i < g->h ; ++i){ // y
+        printf("%02d|", i+1);
         for(i32 j = 0 ; j < g->w ; ++j){ // x
             i32 d = g->data[i][j];
+            fputs("  ", stdout);
             if(LIT(d)){
                 if(ISNUM(d)){
                     putchar('0'+NUM(d));
@@ -78,13 +90,24 @@ void print_game(Game *g){
                 }
             }
             else if (FLAG(d)){
-                putchar('P');
+                putchar('F');
             }
             else{
                 putchar('*');
             }
         }
         putchar('\n');
+    }
+}
+
+void reveal_all(Game *g){
+    for(i32 i = 0 ; i < g->h ; ++i){ // y
+        for(i32 j = 0 ; j < g->w ; ++j){ // x
+            uint32_t d = g->data[i][j];
+            if(!LIT(d)){
+                g->data[i][j] |= (1>>5);
+            }
+        }
     }
 }
 
@@ -113,7 +136,6 @@ bool reveal_game(Game* g, i32 _x, i32 _y){
         // pop from queue
         Node *n = pop(l);
         struct vec *tmp = (struct vec*)n->val;
-        printf("%d %d\n", tmp->x, tmp->y);
         // lit up or not
         if(!vis[tmp->y][tmp->x]){
             vis[tmp->y][tmp->x] = true;

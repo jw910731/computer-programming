@@ -32,3 +32,6 @@ bool reveal_game(Game*, i32 x, i32 y);
 
 // return true if only mines are not lit
 bool game_check(Game*);
+
+// reveal everything in game ends
+void reveal_all(Game *g);

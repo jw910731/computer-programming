@@ -16,7 +16,6 @@ void game();
 void click(byte, byte, byte);
 bool isTerminate(byte, byte, byte);
 
-void motion_d(byte, byte, byte);
 void click_d(byte, byte, byte);
 bool isTerminate_d(byte, byte, byte);
 
@@ -43,17 +42,19 @@ int main(){
 }
 
 void dbg(){
+    g_game = create_game(10, 10, 10);
+    init_game(g_game);
     // setup listener
     context.listener.click = click_d;
-    context.listener.motion = motion_d;
+    context.listener.motion = NULL;
     context.listener.isTerminate = isTerminate_d;
+    print_game(g_game);
     listen(&context.listener);
-}
-
-void motion_d(byte cb, byte cx, byte cy){
-    printf("%x, %x, %x\n", cb, cx, cy);
+    free_game(&g_game);
 }
 void click_d(byte cb, byte cx, byte cy){
+    fputs(CLEAR_TERMINAL, stdout);
+    print_game(g_game);
     printf("%x, %x, %x\n", cb, cx, cy);
 }
 bool isTerminate_d(byte cb, byte cx, byte cy){
@@ -62,14 +63,14 @@ bool isTerminate_d(byte cb, byte cx, byte cy){
 
 static bool stopFlag = false;
 void click(byte cb, byte cx, byte cy){
-    static const i32 xoff = 0x21, yoff = 0x21;
+    static const i32 xoff = 0x26, yoff = 0x23;
     static byte prevX = 255, prevY = 255, prev_key = -1;
     switch (cb&3){
     // release
     case 3:
         // if not drag move
         if(cx == prevX && cy == prevY){
-            i32 x = prevX - xoff, y = prevY - yoff;
+            i32 x = (prevX - xoff)/3, y = (prevY - yoff);
             // left click
             if(prev_key  == 0){
                 if(x >= 0 && x < g_game->w && y >= 0 && y < g_game->h){
@@ -79,9 +80,17 @@ void click(byte cb, byte cx, byte cy){
             }
             // right click
             else if(prev_key == 2){
+                uint32_t *d = &(g_game->data[y][x]);
                 if(x >= 0 && x < g_game->w && y >= 0 && y < g_game->h && !LIT(g_game->data[y][x])){
                     // flag
-                    g_game->data[y][x] |= (1<<6);
+                    if(FLAG(*d)){
+                        // cancel 
+                        *d = *d ^ (1<<6);
+                    }
+                    else{
+                        // add flag
+                        *d |= (1<<6);
+                    }
                 }
                 stopFlag = true;
             }
@@ -133,7 +142,6 @@ void game(){
             }
             debug("\n");
         }
-
         listen(&context.listener);
         bool ck = game_check(g_game);
         if(g_game->end){
