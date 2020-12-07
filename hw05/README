@@ -20,13 +20,13 @@ test.h & test2.h must be provided in the same dir as makefile. Otherwise `make d
 
 hw0505
 -------
-This minesweeper game is interactive through MOUSE CLICK!
-You must run this in Linux system and the terminal should support xterm mouse event and shall not redirect stdin or stdout, otherwise an error is given through stderr and the program will be terminated.
+This minesweeper game is interact through MOUSE CLICK!
+You must run this in Linux system with terminal that support xterm mouse event and shall not redirect stdin or stdout, otherwise an error is given through stderr and the program will be terminated.
 Left click reveals the block. Right click to place a flag, right click again to remove the flag.
 You must not drag, a drag mouse event will be ignored.
 The ^C will not send SIGINT to terminal when recieving mouse event, if you would like to quit game immediately you should use `q` instead.
 
-Cheetsheets
+Keymapping
 ===========
 Left click : reveal
 Right click: flag
