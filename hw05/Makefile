@@ -24,9 +24,9 @@ dev: $(TARGETS)
 
 .SECONDEXPANSION:
 $(TARGETS): $$($$@_OBJ)
-	$(CC) $^ -o $@.out $(LDFLAGS)
+	$(CC) $^ -o $@ $(LDFLAGS)
 
 %.o: $@.c
 
 clean:
-	rm -rf $(addsuffix .out,$(TARGETS)) $(foreach targ,$(TARGETS),$(foreach obj, $($(targ)_OBJ), $(obj)))
+	rm -rf $(TARGETS) $(foreach targ,$(TARGETS),$(foreach obj, $($(targ)_OBJ), $(obj)))
