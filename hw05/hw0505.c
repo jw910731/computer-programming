@@ -154,7 +154,7 @@ void game(){
             reveal_all(g_game);
             fputs(CLEAR_TERMINAL, stdout);
             print_game(g_game);
-            printf(CLR_LGRN"You had reveal the entire field without touching any mine!\nYou Win!"CLR_RST);
+            printf(CLR_LGRN"You had reveal the entire field without touching any mine!\nYou Win!\n"CLR_RST);
             break;
         }
     }
