@@ -1,4 +1,5 @@
 CC=gcc
+OBJDIR:=$(shell mktemp -d)
 CFLAGS=-Wall -Wextra -std=c11
 LDFLAGS=-lm 
 
@@ -23,10 +24,11 @@ dev: LDFLAGS:=$(LDFLAGS)
 dev: $(TARGETS)
 
 .SECONDEXPANSION:
-$(TARGETS): $$($$@_OBJ)
+$(TARGETS): $$(patsubst %, $(OBJDIR)/%, $$($$@_OBJ))
 	$(CC) $^ -o $@ $(LDFLAGS)
 
-%.o: $@.c
+$(OBJDIR)/%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $< 
 
 clean:
-	rm -rf $(TARGETS) $(foreach targ,$(TARGETS),$(foreach obj, $($(targ)_OBJ), $(obj)))
+	rm -rf $(TARGETS)
