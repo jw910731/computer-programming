@@ -5,7 +5,7 @@ Author Info and Misc
 Build
 ------
 run `make` to build this homework, all executable will be compiled.
-BTW, the Makefile is extremely compact and FABULOUS. Please check it out. >.<
+BTW, the Makefile is extremely compact and FABULOUS, it output all its object file to temp dir to keep the work directory clean and nice. Please check it out. >.<
 
 Also, `make clean` is supported.
 
