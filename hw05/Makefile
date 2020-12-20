@@ -25,7 +25,7 @@ dev: $(TARGETS)
 
 .SECONDEXPANSION:
 $(TARGETS): $$(patsubst %, $(OBJDIR)/%, $$($$@_OBJ))
-	$(CC) $^ -o $@ $(LDFLAGS)
+	$(CC) $(filter %.o, $^) -o $@ $(LDFLAGS)
 
 $(OBJDIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $< 
