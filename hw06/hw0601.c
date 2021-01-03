@@ -3,10 +3,10 @@
 #include "color.h"
 int main(){
     i64 n;
-    uint8_t *arr;
+    byte *arr;
     printf("Please input an unsigned (positive) integer: ");
     scanf("%lld", &n);
-    arr = &n;
+    arr = (byte*)&n;
     while(1){
         i32 pos = -1, val = -1;
         printf("The integer: %lld\n", n);
