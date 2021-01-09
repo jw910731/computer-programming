@@ -8,7 +8,7 @@ hw0601_OBJ= hw0601.o basic.o
 hw0602_OBJ= hw0602.o basic.o undo.o queue.o
 hw0603_OBJ= hw0603.o basic.o geometry.o
 hw0604_OBJ= hw0604.o basic.o geometry.o
-hw0605_OBJ= hw0605.o basic.o
+hw0605_OBJ= hw0605.o basic.o cardutil.o
 
 .PHONY: all
 
