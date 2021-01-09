@@ -6,6 +6,7 @@ int main(){
     byte *arr;
     printf("Please input an unsigned (positive) integer: ");
     scanf("%lld", &n);
+    if(n < 0) err("Input number must be positive!");
     arr = (byte*)&n;
     while(1){
         i32 pos = -1, val = -1;
