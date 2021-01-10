@@ -1,0 +1,89 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{listings}
+\usepackage{xltxtra}
+\usepackage{fontspec} %設定字體
+\usepackage[CheckSingle, CJKmath]{xeCJK}
+\usepackage{color}
+\usepackage[x11names]{xcolor}
+
+\setCJKmainfont{Noto Sans CJK TC}
+\setromanfont[Mapping=tex-text]{Latin Modern Roman}
+\setsansfont[Mapping=tex-text]{Latin Modern Sans}
+\setmonofont[Mapping=tex-text]{Latin Modern Mono}
+
+\lstset{										% Code顯示
+    basicstyle=\footnotesize\ttfamily, 					% the size of the fonts that are used for the code
+    numbers=left,									% where to put the line-numbers
+    numberstyle=\footnotesize,					% the size of the fonts that are used for the line-numbers
+    stepnumber=1,									% the step between two line-numbers. If it's 1, each line  will be numbered
+    numbersep=5pt,									% how far the line-numbers are from the code
+    backgroundcolor=\color{white},				% choose the background color. You must add \usepackage{color}
+    showspaces=false,								% show spaces adding particular underscores
+    showstringspaces=false,						% underline spaces within strings
+    showtabs=false,								% show tabs within strings adding particular underscores
+    frame=false,										% adds a frame around the code
+    tabsize=2,										% sets default tabsize to 2 spaces
+    captionpos=b,									% sets the caption-position to bottom
+    breaklines=true,								% sets automatic line breaking
+    breakatwhitespace=false,						% sets if automatic breaks should only happen at whitespace
+    escapeinside={\%*}{*)},						% if you want to add a comment within your code
+    morekeywords={*},								% if you want to add more keywords to the set
+    keywordstyle=\bfseries\color{Blue1},
+    commentstyle=\itshape\color{Red4},
+    stringstyle=\itshape\color{Green4},
+}
+
+%================================================%
+
+\title{C Programming I\\HW0606\\Answer}
+\author{作者: 吳文元(jw910731)}
+\date{日期: 2021/01/10}
+
+\begin{document}
+\maketitle
+\section{Bonus: What is the difference}
+兩支程式的執行結果完全相同，但其中記憶體位置的分佈卻有所不同
+我將兩隻程式皆加入以下程式片段在主程式的最後面
+\begin{lstlisting}[language=c]
+for (size_t i = 0; i < 9; i++){
+    printf("%p\n", a[i]);
+}
+printf("%p\n", a);
+\end{lstlisting}
+\subsection{程式1}
+這是加入的程式之輸出 :
+\begin{lstlisting}
+0x7ffddbe784a0
+0x7ffddbe784c4
+0x7ffddbe784e8
+0x7ffddbe7850c
+0x7ffddbe78530
+0x7ffddbe78554
+0x7ffddbe78578
+0x7ffddbe7859c
+0x7ffddbe785c0
+0x7ffddbe784a0
+\end{lstlisting}
+我們可以發現每行記憶體都相差9*4個Byte，其中的4是\lstinline{int_32}的大小。
+也就是說每一行的位置是完全相鄰、連續的，且完全由Stack管理(也就是自動管理其記憶體的生命周期)。
+\subsection{程式2}
+這是加入的程式之輸出:
+\begin{lstlisting}
+0x556326a1f2a0
+0x556326a1f2d0
+0x556326a1f300
+0x556326a1f330
+0x556326a1f360
+0x556326a1f390
+0x556326a1f3c0
+0x556326a1f3f0
+0x556326a1f420
+0x7ffc974f07b0
+\end{lstlisting}
+雖然可以發現每行記憶體相差12*4個Byte，但這其實只是實作導致的巧合，此外陣列a的第一個維度與其他維度所在的位置是相差甚遠的！
+這是因為a這個陣列是在Stack上，而其元素指向的位置皆在Heap上，且由\lstinline{malloc}與\lstinline{free}函數手動管理這些元素指向的空間的生命周期！
+此外，這支程式有記憶體洩漏的隱憂存在，因其\lstinline{malloc}的空間沒有被\lstinline{free}掉
+\subsection{結論}
+這也就是說這兩支程式最大的差別是在記憶體管理的策略上，第1支程式使用自動的管理策略，將陣列放在Stack上面；第2支程式使用手動的管理策略，宣告了一個指標陣列在Stack上，且裡面的元素指向由\lstinline{malloc}分配的Heap空間，但顯然管理不當，出現了記憶體洩漏的問題，幸好這支程式很快就執行結束了，並未造成問題。
+\end{document}
