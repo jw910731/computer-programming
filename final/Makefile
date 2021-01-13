@@ -3,8 +3,10 @@ OBJDIR:=$(shell [ -d obj ] || mkdir obj && echo "obj")
 CFLAGS=-Wall -Wextra -std=gnu11
 LDFLAGS=-lm 
 
-TARGETS=main
-main_OBJ=main.o basic.o
+TARGETS=fin01 fin02 fin03
+fin01_OBJ=fin01.o basic.o geometry.o
+fin02_OBJ=fin02.o basic.o
+fin03_OBJ=fin03.o basic.o
 
 .PHONY: all
 
