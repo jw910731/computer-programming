@@ -1,0 +1,19 @@
+Author Info and Misc
+------
+我的名字是吳文元，學號是40947030S
+
+Build
+------
+run `make` to build this homework, all executable will be compiled.
+
+Also, `make clean` is supported.
+
+*******************************************************
+*                       [Note]                        *
+*  you need to put external object file in `obj` DIR  *
+*              create one if not existed              *
+*******************************************************
+
+Run
+-------
+All executable accept no argument and can simply build and run on any POSIX supported systems.
