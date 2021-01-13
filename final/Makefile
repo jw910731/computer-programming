@@ -5,7 +5,7 @@ LDFLAGS=-lm
 
 TARGETS=fin01 fin02 fin03
 fin01_OBJ=fin01.o basic.o geometry.o
-fin02_OBJ=fin02.o basic.o
+fin02_OBJ=fin02.o basic.o maze.o
 fin03_OBJ=fin03.o basic.o
 
 .PHONY: all
@@ -15,11 +15,10 @@ all: $(TARGETS)
 
 debug: CFLAGS:=$(CFLAGS) -g -DDEBUG -fsanitize=leak -fsanitize=undefined
 debug: LDFLAGS:=$(LDFLAGS) -fsanitize=address -lubsan -lasan 
-debug: $(TARGETS)
+debug: fin01 fin02_DBG fin03
 
 dev: CFLAGS:=$(CFLAGS) -g -DDEBUG
-dev: LDFLAGS:=$(LDFLAGS) 
-dev: $(TARGETS)
+dev: fin01 fin02_DBG fin03
 
 .SECONDEXPANSION:
 $(TARGETS): $$(patsubst %, $(OBJDIR)/%, $$($$@_OBJ))
@@ -30,3 +29,7 @@ $(OBJDIR)/%.o: %.c
 
 clean:
 	rm -rf $(TARGETS) obj
+
+fin02_DBG:CFLAGS:=$(CFLAGS) -g -DDEBUG
+fin02_DBG: $(OBJDIR)/fin02.o $(OBJDIR)/basic.o $(OBJDIR)/maze_test.o
+	$(CC) $(filter %.o, $^) -o $@ $(LDFLAGS)
