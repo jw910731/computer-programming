@@ -1,15 +1,24 @@
 #define PRM1 1000000007U
 #define PRM2 1000000009U
-#define MASK(x, n) (((x)&((uint32_t)(0xff) << (8*(n)))) >> (8*(n)))
+#define PRM3 0xdefaced
+#define LAYER 8
+#define LAY_SIZE 4
+#define MASK(x, n) (((x)&((uint32_t)(0xf) << (LAY_SIZE*(n)))) >> (LAY_SIZE*(n)))
 
 #pragma once
 
 #include <stdint.h>
 #include <stdlib.h>
 
+typedef struct item{
+    uint32_t backup_hash;
+    char *data;
+    struct item *next;
+}Item;
+
 typedef struct {
     // pointer
-    void *t[1<<8];
+    void *t[1<<LAY_SIZE];
 }Entry;
 
 typedef struct {
@@ -27,7 +36,7 @@ uint32_t hash_str(const char *s);
 void table_emplace(HashTable *t, const char *key, char *s);
 
 // Access a data from table
-void *table_query(HashTable *t, const char *key);
+Item *table_query(HashTable *t, const char *key);
 
 // Allocate Entry
 void **entry_allocate(HashTable *t, uint32_t hash);
