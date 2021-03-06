@@ -11,8 +11,9 @@ else
 XELATEX=xelatex
 endif
 BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
+
 TARGETS=hw0104
-hw0104_OBJ= hw0104.o hash_map.o
+hw0104_OBJ= hw0104.o hash_map.o basic.o
 
 .PHONY: all
 

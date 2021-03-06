@@ -17,3 +17,5 @@ typedef uint32_t u32;
 typedef double fp;
 
 void err(const char *s);
+
+size_t fgets_n(char *s, int size, FILE *stream);
