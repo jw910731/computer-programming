@@ -10,7 +10,7 @@
 
 // use to construct stack like key
 static char stack_buf[4096], tmp[4096];
-static int bp = 0, sp = 0, stack[2048], tp = 0;
+static i32 bp = 0, sp = 0, stack[2048], tp = 0;
 
 typedef enum{
     Key,
