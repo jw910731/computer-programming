@@ -12,11 +12,12 @@ XELATEX=xelatex
 endif
 BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
 
-TARGETS=hw0101 hw0102 hw0103 hw0104
+TARGETS=hw0101 hw0102 hw0103 hw0104 hw0105
 hw0101_OBJ=hw0101.o basic.o
 hw0102_OBJ=hw0102.o basic.o
 hw0103_OBJ=hw0103.o basic.o
-hw0104_OBJ= hw0104.o hash_map.o basic.o
+hw0104_OBJ=hw0104.o hash_map.o basic.o
+hw0105_OBJ=hw0105.o basic.o mystring.o
 
 .PHONY: all
 
