@@ -5,10 +5,30 @@ Author Info and Misc
 Build
 ------
 run `make` to build this homework, all executable will be compiled.
-BTW, the Makefile is extremely compact and FABULOUS, it output all its object file to temp dir to keep the work directory nice and clean. Please check it out. >.<
+BTW, the Makefile is extremely compact and FABULOUS, it output all its object file to temp dir to keep the work directory nice and clean.
+Please check it out. >.<
 
 Also, `make clean` is supported.
 
 Run
 -------
 All executable accept no argument and can simply run in POSIX supported systems.
+
+Hw0101
+-------
+The input must be terminated with '00'. Otherwise the behaviour is not guaranteed. (Though I made it gracefully ends without error message.)
+The input content after '00' is ignored.
+
+Hw0104
+-------
+The JSON parser's valid input is a subset of the FRC 4627. The difference is as below:
+1. There must contain a root object (due to the CLI specification)
+2. The Name of the value does not contain '.', '[' and ']'
+3. excess ',' in array is not valid
+4. Newline character will cause error instead of being ignored.
+Therefore, input only contain one valid JSON value (except object) with no root object is not valid.
+The input is not checked and will cause undefined behaviour (even crash without error message).
+The program behaviour is guaranteed only when input is valid.
+
+Also, the query is done with a FABULOUS hand crafted hash map which cost about double memory space and run at merely same speed in contrast to C++ unordered_map.
+Please check it out.
