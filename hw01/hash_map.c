@@ -24,26 +24,29 @@ static void entry_free(Entry *e, int d){
     free(e);
 }
 
+// these implementation of hash is copied in following link
+// https://byvoid.com/zht/blog/string-hash-compare/
 uint32_t hash_str(const char *s){
-    uint32_t ret = 0;
-    uint64_t p = 1;
-    while(*s){
-        ret = (ret + (uint32_t)(((uint64_t)(*s) * p) % PRM2)) % PRM2;
-        p = (p*PRM1) % PRM2;
-        ++s;
+    // rs hash
+    uint32_t b = 378551;
+    uint32_t a = 63689;
+    uint32_t hash = 0;
+    while (*s)
+    {
+        hash = hash * a + (*s++);
+        a *= b;
     }
-    return ret;
+    return (hash & 0x7FFFFFFF);
 }
 
 uint32_t backup_hash(const char *s){
-    uint32_t ret = 0;
-    uint64_t p = 1;
-    while(*s){
-        ret = (ret + (uint32_t)(((uint64_t)(*s) * p) % PRM1)) % PRM1;
-        p = (p*PRM3) % PRM1;
-        ++s;
+    // js hash
+    uint32_t hash = 1315423911;
+    while (*s)
+    {
+        hash ^= ((hash << 5) + (*s++) + (hash >> 2));
     }
-    return ret;
+    return (hash & 0x7FFFFFFF);
 }
 
 HashTable *table_create(){

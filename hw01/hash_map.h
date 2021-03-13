@@ -1,6 +1,3 @@
-#define PRM1 1000000007U
-#define PRM2 1000000009U
-#define PRM3 0xdefaced
 #define LAYER 8
 #define LAY_SIZE 4
 #define MASK(x, n) (((x)&((uint32_t)(0xf) << (LAY_SIZE*(n)))) >> (LAY_SIZE*(n)))
@@ -31,6 +28,7 @@ HashTable *table_create();
 void table_free(HashTable **t);
 
 uint32_t hash_str(const char *s);
+uint32_t backup_hash(const char *s);
 
 // Emplace a data to table
 void table_emplace(HashTable *t, const char *key, char *s);
