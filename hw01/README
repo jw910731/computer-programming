@@ -21,7 +21,7 @@ The input content after '00' is ignored.
 
 Hw0104
 -------
-The JSON parser's valid input is a subset of the FRC 4627. The difference is as below:
+The JSON parser's valid input is a subset of the FRC 4627. The difference is described below:
 1. There must contain a root object (due to the CLI specification)
 2. The Name of the value does not contain '.', '[' and ']'
 3. excess ',' in array is not valid
