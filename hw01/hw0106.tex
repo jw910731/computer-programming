@@ -52,7 +52,7 @@
 \maketitle
 \section{Bonus: perror}
 
-\lstinline{perror}的功能就是可以將\lstinline{errno}對應的錯誤訊息打印到\lstinline{stderr}去，使用時可以傳一個字串作為輸出時的前綴，方便編寫者追蹤錯誤的原因！
+\lstinline{perror}的功能就是可以將\lstinline{errno}對應的錯誤訊息輸出到\lstinline{stderr}去，使用時可以傳一個字串作為輸出時的前綴，方便編寫者追蹤錯誤的原因！
 
 其實說穿了，\lstinline{perror}可以被視為\lstinline{strerror}的包裝，透過封裝\lstinline{strerror}並將他的輸出與給予的參數的一併輸出到\lstinline{stderr}的輸出流上！兩者的差異就是，我如果使用\lstinline{strerror}，我可以自己選擇要輸出到哪個輸出流，甚至是儲存錯誤資訊，提供更大的彈性，而\lstinline{perror}則是較為方便，將常用的錯誤資訊處理方式封裝起來，使除錯更方便！
 
