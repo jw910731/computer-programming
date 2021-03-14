@@ -31,9 +31,9 @@ debug: $(TARGETS)
 dev: CFLAGS:=$(CFLAGS) -g -DDEBUG
 dev: $(TARGETS)
 
-##doc: example.pdf
+doc: hw0106.pdf
 
-example.pdf: example.tex
+hw0106.pdf: hw0106.tex
 	$(XELATEX) $(LATEXFLAGS) -output-directory=$(BUILD_DIR) $<
 	$(XELATEX) $(LATEXFLAGS) -output-directory=$(BUILD_DIR) $<
 	cp $(BUILD_DIR)/*.pdf .

@@ -1,0 +1,83 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{listings}
+\usepackage{xltxtra}
+\usepackage{fontspec} %設定字體
+\usepackage[CheckSingle, CJKmath]{xeCJK}
+\usepackage{color}
+\usepackage[x11names]{xcolor}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+}
+
+\setCJKmainfont{Noto Serif CJK TC}
+\setromanfont[Mapping=tex-text]{Latin Modern Roman}
+\setsansfont[Mapping=tex-text]{Latin Modern Sans}
+\setmonofont[Mapping=tex-text]{Fira Code}
+
+\lstset{										% Code顯示
+    basicstyle=\footnotesize\ttfamily, 					% the size of the fonts that are used for the code
+    numbers=left,									% where to put the line-numbers
+    numberstyle=\footnotesize,					% the size of the fonts that are used for the line-numbers
+    stepnumber=1,									% the step between two line-numbers. If it's 1, each line  will be numbered
+    numbersep=5pt,									% how far the line-numbers are from the code
+    backgroundcolor=\color{white},				% choose the background color. You must add \usepackage{color}
+    showspaces=false,								% show spaces adding particular underscores
+    showstringspaces=false,						% underline spaces within strings
+    showtabs=false,								% show tabs within strings adding particular underscores
+    frame=false,										% adds a frame around the code
+    tabsize=4,										% sets default tabsize to 2 spaces
+    captionpos=b,									% sets the caption-position to bottom
+    breaklines=true,								% sets automatic line breaking
+    breakatwhitespace=false,						% sets if automatic breaks should only happen at whitespace
+    escapeinside={\%*}{*)},						% if you want to add a comment within your code
+    morekeywords={*},								% if you want to add more keywords to the set
+    keywordstyle=\bfseries\color{Blue1},
+    commentstyle=\itshape\color{Red4},
+    stringstyle=\itshape\color{Green4},
+}
+
+%================================================%
+
+\title{C Programming I\\HW0106\\Answer}
+\author{作者: 吳文元(jw910731)}
+\date{日期: 2021/03/15}
+
+\begin{document}
+\maketitle
+\section{Bonus: perror}
+
+\lstinline{perror}的功能就是可以將\lstinline{errno}對應的錯誤訊息打印到\lstinline{stderr}去，使用時可以傳一個字串作為輸出時的前綴，方便編寫者追蹤錯誤的原因！
+
+其實說穿了，\lstinline{perror}可以被視為\lstinline{strerror}的包裝，透過封裝\lstinline{strerror}並將他的輸出與給予的參數的一併輸出到\lstinline{stderr}的輸出流上！兩者的差異就是，我如果使用\lstinline{strerror}，我可以自己選擇要輸出到哪個輸出流，甚至是儲存錯誤資訊，提供更大的彈性，而\lstinline{perror}則是較為方便，將常用的錯誤資訊處理方式封裝起來，使除錯更方便！
+
+\subsection{\lstinline{perror}範例}
+這裡提供我之前寫的簡易沙盒作為\lstinline{perror}的範例，完整的專案請見\href{https://github.com/jw910731/simple-sandbox}{simple-sandbox}
+
+\begin{lstlisting}[language=c++, label={lst:perror Example}, caption={perror Example in \lstinline{src/sandbox.cpp}}, firstnumber=136]
+void Sandbox::child(const std::vector<std::string> &args) {
+    // prepare args and env
+    char *const *prepared_args = prepare_helper(args);
+    // preserve for env passing
+    char *const *prepared_envs = prepare_helper({});
+    // setup fd for redirection
+    setupFd();
+    // setup rlimit
+    setupLimit();
+    // execute real program
+    int ret = execve(filePath.c_str(), prepared_args, prepared_envs);
+    if(ret < 0){
+        perror("execve():");
+        exit(-1);
+    }
+}
+\end{lstlisting}
+
+可以看到裡面使用了\lstinline{perror}來捕捉\lstinline{execve}所遇到的錯誤，供使用者與程式設計師除錯，在呼叫時，傳入了參數\lstinline{execve():}使得在印出錯誤訊息時，可以知道是哪一個函數呼叫失敗並可以得知失敗的原因！
+這樣如果使用者所給定的執行檔不存在或不具有可執行權限，便可在錯誤訊息中得知！
+\end{document}
