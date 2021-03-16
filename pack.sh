@@ -6,6 +6,10 @@ if [ -z ${1+x} ]; then
 	echo "homework to zip is unset."
 	exit
 fi
-ln -s hw0$1 ${id}_hw0$1
-zip -r ${id}_hw0$1.zip ${id}_hw0$1 -x "*.DS_Store"
-rm ${id}_hw0$1
+
+origin_dir=hw0$1
+dest_name=${id}_hw0$1
+
+ln -s $origin_dir $dest_name
+zip -r ${dest_name}.zip ${dest_name} -x "*.DS_Store" "*.gitignore" -x $([ -r ${dest_name}/.gitignore ] && cat ${dest_name}/.gitignore | perl -pe 's/^(?!\*)/\*/g' | sed -E "s/(.+)\/\*\*/\1\*\n\1\*/g")
+rm $dest_name
