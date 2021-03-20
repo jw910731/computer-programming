@@ -85,7 +85,7 @@ the resulting value; otherwise, the behavior is undefined.
 \end{displayquote}
 而我們可以發現程式中第\ref{code:bug}行，裡面表達的\lstinline{1<<31}所指的\(1\times 2^{31}\)已超出32位有號整數所能儲存的\([2^{31}-1, -2^{31}]\)範圍了，
 使得這個expression的行為將會是platform specific的。
-
+\newpage
 這隻程式應該使用\lstinline{union}，將有號整數與無號整數共用同個空間，並使用無號整數做安全的位元運算！我修改後如下:
 
 \begin{lstlisting}[language=c, caption={修改後的的程式}]
