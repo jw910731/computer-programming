@@ -1,0 +1,22 @@
+Author Info and Misc
+------
+我的名字是吳文元，學號是40947030S
+
+Build
+------
+run `make` to build this homework, all executable will be compiled.
+BTW, the Makefile is extremely compact and FABULOUS, it output all its object file to temp dir to keep the work directory nice and clean. Please check it out. >.<
+
+Also, `make clean` is supported.
+
+Run
+-------
+All executable accept no argument and can simply run in POSIX supported systems.
+
+hw0201
+-------
+The mixed_set function only see following input as valid input
+1. c is not zero
+2. a is not zero and b and c is not negative
+0 -1 3
+-1 1 3
