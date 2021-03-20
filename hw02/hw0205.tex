@@ -1,0 +1,120 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{listings}
+\usepackage{xltxtra}
+\usepackage{fontspec} %設定字體
+\usepackage[CheckSingle, CJKmath]{xeCJK}
+\usepackage{color}
+\usepackage[x11names]{xcolor}
+\usepackage{csquotes}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+
+\setCJKmainfont{Noto Serif CJK TC}
+\setromanfont[Mapping=tex-text]{Latin Modern Roman}
+\setsansfont[Mapping=tex-text]{Latin Modern Sans}
+\setmonofont[Mapping=tex-text]{Fira Code}
+
+\lstset{										% Code顯示
+    basicstyle=\footnotesize\ttfamily, 					% the size of the fonts that are used for the code
+    numbers=left,									% where to put the line-numbers
+    numberstyle=\footnotesize,					% the size of the fonts that are used for the line-numbers
+    stepnumber=1,									% the step between two line-numbers. If it's 1, each line  will be numbered
+    numbersep=5pt,									% how far the line-numbers are from the code
+    backgroundcolor=\color{white},				% choose the background color. You must add \usepackage{color}
+    showspaces=false,								% show spaces adding particular underscores
+    showstringspaces=false,						% underline spaces within strings
+    showtabs=false,								% show tabs within strings adding particular underscores
+    frame=false,										% adds a frame around the code
+    tabsize=4,										% sets default tabsize to 2 spaces
+    captionpos=b,									% sets the caption-position to bottom
+    breaklines=true,								% sets automatic line breaking
+    breakatwhitespace=false,						% sets if automatic breaks should only happen at whitespace
+    escapeinside={\%*}{*)},						% if you want to add a comment within your code
+    morekeywords={*},								% if you want to add more keywords to the set
+    keywordstyle=\bfseries\color{Blue1},
+    commentstyle=\itshape\color{Red4},
+    stringstyle=\itshape\color{Green4},
+}
+
+%================================================%
+
+\title{C Programming I\\HW0205\\Answer}
+\author{作者: 吳文元(jw910731)}
+\date{日期: 2021/03/20}
+
+\begin{document}
+\maketitle
+\begin{lstlisting}[language=c, caption={題敘中的程式}, escapeinside={(*}{*)}]
+#include <stdio.h>
+#include <stdint.h>
+
+int main()
+{
+    int32_t number = 0;
+
+    scanf( "%d", & number );
+
+    int32_t bit = 1;
+    bit = bit << 31; (*\label{code:bug}*)
+    
+    for( int i = 0 ; i < 32 ; i++ ){
+        if( bit & number )
+        printf( "1" );
+        else
+        printf( "0" );
+        bit = bit >> 1;
+    }
+    return 0;
+}
+\end{lstlisting}
+其中第\ref{code:bug}行中的左移在規格書中是未定義行為！
+根據規格書\href{https://drive.google.com/file/d/1BGSbEazY5azERlFtP9DfmTTHgj-0AjY7/view}{ISO/IEC 9899:201x}中的第95頁指出
+\begin{displayquote}
+The result of E1 << E2 is E1 left-shifted E2 bit positions; vacated bits are filled with
+zeros. If E1 has an unsigned type, the value of the result is \(E1 × 2^{E2}\), reduced modulo
+one more than the maximum value representable in the result type. If E1 has a signed
+type and nonnegative value, and \(E1 × 2^{E2}\) is representable in the result type, then that is
+the resulting value; otherwise, the behavior is undefined.
+\end{displayquote}
+而我們可以發現程式中第\ref{code:bug}行，裡面表達的\lstinline{1<<31}所指的\(1\times 2^{31}\)已超出32位有號整數所能儲存的\([2^{31}-1, -2^{31}]\)範圍了，
+使得這個expression的行為將會是platform specific的。
+
+這隻程式應該使用\lstinline{union}，將有號整數與無號整數共用同個空間，並使用無號整數做安全的位元運算！我修改後如下:
+
+\begin{lstlisting}[language=c, caption={修改後的的程式}]
+#include <stdio.h>
+#include <stdint.h>
+
+union soviet{
+    int32_t num;
+    uint32_t usgn_num;
+};
+
+int main()
+{
+    union soviet number;
+
+    scanf( "%d", & number.num );
+
+    int32_t bit = 1;
+    bit = bit << 31;
+    
+    for( int i = 0 ; i < 32 ; i++ ){
+        if( bit & number.usgn_num )
+        printf( "1" );
+        else
+        printf( "0" );
+        bit = bit >> 1;
+    }
+    return 0;
+}
+\end{lstlisting}
+這樣就可以避免掉不安全且不可移植的行為了！
+\end{document}

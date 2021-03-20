@@ -29,12 +29,12 @@ debug: $(TARGETS)
 dev: CFLAGS:=$(CFLAGS) -g -DDEBUG
 dev: $(TARGETS)
 
-#doc: example.pdf
+doc: hw0205.pdf
 
-#example.pdf: example.tex
-#	$(XELATEX) $(LATEXFLAGS) -output-directory=$(BUILD_DIR) $<
-#	$(XELATEX) $(LATEXFLAGS) -output-directory=$(BUILD_DIR) $<
-#	cp $(BUILD_DIR)/*.pdf .
+hw0205.pdf: hw0205.tex
+	$(XELATEX) $(LATEXFLAGS) -output-directory=$(BUILD_DIR) $<
+	$(XELATEX) $(LATEXFLAGS) -output-directory=$(BUILD_DIR) $<
+	cp $(BUILD_DIR)/*.pdf .
 
 .SECONDEXPANSION:
 $(TARGETS): $$(patsubst %, $(OBJDIR)/%, $$($$@_OBJ))
