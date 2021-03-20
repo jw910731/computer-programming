@@ -27,6 +27,10 @@ static inline void simplify(sMixedNumber *num){
         num->a = num->a / g;
         num->b = num->b / g;
     }
+    if(lsgn(num->a) == lsgn(num->b) && num->b < 0){
+        num->a *= -1;
+        num->b *= -1;
+    }
 }
 
 int mixed_set( sMixedNumber *pNumber , int32_t a, int32_t b, int32_t c){
