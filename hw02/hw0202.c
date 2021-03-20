@@ -11,7 +11,7 @@ union soviet{
     double f;
     struct intern{
         u64 frac : 52;
-        i64 exp : 11;
+        u64 exp : 11;
         u64 sgn : 1;
     } trans;
 };
@@ -46,7 +46,7 @@ int main(){
             printf(" + 2^-%lu", 52-i);
         }
     }
-    printf(") * 2^(%d - 1023)", fp.trans.exp);
+    printf(") * 2^(%u - 1023)", fp.trans.exp);
     putchar('\n');
     return 0;
 }
