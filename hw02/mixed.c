@@ -22,7 +22,7 @@ static inline i64 lcm(i64 a, i64 b){
 }
 
 static inline void simplify(sMixedNumber *num){
-    i64 g = gcd(abs(num->a), abs(num->b));
+    i64 g = gcd(labs(num->a), labs(num->b));
     if(g) {
         num->a = num->a / g;
         num->b = num->b / g;

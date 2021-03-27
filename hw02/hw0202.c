@@ -29,7 +29,7 @@ int main(){
         l = strlen(buf);
         fp.f = strtod(buf, &ed);
     } while (buf+l != ed);
-    printf("Sign: %lu\n", fp.trans.sgn);
+    printf("Sign: %d\n", fp.trans.sgn);
     printf("Exponent: ");
     for(i64 i = 10 ; i >= 0 ; --i){
         putchar('0'+((fp.trans.exp&(1<<i))>>i));
@@ -40,7 +40,7 @@ int main(){
         putchar('0' + ((fp.trans.frac&(1ULL<<(u64)i))>>(u64)i) );
     }
     putchar('\n');
-    printf("%.3000lg = (-1)^%lu + (1", fp.f, fp.trans.sgn);
+    printf("%.3000lg = (-1)^%d + (1", fp.f, fp.trans.sgn);
     for(i64 i = 51 ; i >= 0 ; --i){
         if(((fp.trans.frac&(1ULL<<(u64)i))>>(u64)i)){
             printf(" + 2^-%lu", 52-i);
