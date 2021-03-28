@@ -1,6 +1,6 @@
 CC=gcc
 OBJDIR:=$(shell [ -d obj ] || mkdir obj && echo "obj")
-CFLAGS=-Wall -Wextra -std=c11
+CFLAGS=-Wall -Wextra -std=gnu11
 LDFLAGS=-lm 
 
 # XeLaTeX Settings
@@ -12,10 +12,11 @@ XELATEX=xelatex
 endif
 BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
 
-TARGETS=hw0201 hw0202 hw0203
-hw0201_OBJ= basic.o hw0201.o mixed.o
-hw0202_OBJ= basic.o hw0202.o
-hw0203_OBJ= basic.o hw0203.o
+TARGETS=hw0201 hw0202 hw0203 hw0204
+hw0201_OBJ=basic.o hw0201.o mixed.o
+hw0202_OBJ=basic.o hw0202.o
+hw0203_OBJ=basic.o hw0203.o
+hw0204_OBJ=basic.o hw0204.o bignum.o
 
 .PHONY: all
 
