@@ -15,6 +15,8 @@ inline static void newline_eliminator(char *s){
     if(*(s+len-1) == '\n') s[len-1] = 0;
 }
 
+#pragma GCC diagnostic ignored "-Wunused-result"
+#pragma GCC diagnostic push
 char *biop(const char *a, const char *b, char c){
     char *s = calloc(sizeof(biop_str) + strlen(a) + strlen(b), sizeof(char));
     sprintf(s, biop_str, a, c, b);
@@ -45,6 +47,7 @@ char *factorial(i32 n){
     free(s);
     return result;
 }
+#pragma GCC diagnostic pop
 
 void print(const sBigNum num) {
     printf("%s\n", num.n);
