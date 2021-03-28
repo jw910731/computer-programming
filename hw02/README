@@ -18,3 +18,8 @@ hw0201
 The mixed_set function only see following input as valid input
 1. c is not zero
 2. a is not zero and b and c is not negative
+
+bigint
+-------
+The compare function return -1, 0, 1. Corresponding to less than, equal than and greater than.
+In the final version, no GC method is introduced and thus memory leak may happened and caller should manually free the attribute "n" after the object is about to expire.

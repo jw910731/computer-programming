@@ -7,17 +7,6 @@
 
 #include <stdint.h>
 
-#ifndef GC_ENABLE
-#define MALLOC(x) malloc(x)
-#define FREE(x) free(x)
-#define REALLOC(x) realloc(x)
-#else
-#include <gc.h>
-#define MALLOC(x) GC_MALLOC(x)
-#define FREE(x) GC_FREE(x)
-#define REALLOC(x, size) GC_REALLOC(x, size)
-#endif  // ifndef GC_ENABLE
-
 typedef struct _sBigNum {
     char *n;
 } sBigNum;
