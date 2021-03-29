@@ -3,6 +3,7 @@
 //
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #include "bignum.h"
 #include "basic.h"
@@ -54,6 +55,9 @@ void print(const sBigNum num) {
 }
 
 int32_t set(sBigNum *pNum, char *str) {
+    i32 inc = 0;
+    for(const char *it = str; *it != 0 ; ++it, ++inc)
+        if(!(isdigit(*it) && (!inc && it == '-'))) return -1;
     pNum->n = strdup(str);
     return 0;
 }
