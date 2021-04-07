@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "basic.h"
 
@@ -93,10 +94,11 @@ int main() {
         // row write
         for (i32 j = 0; j < san_ow; ++j) {
             const struct pix_t *pBuf = NULL;
-            if (j < indent && (j - indent) < row_len) { // in white area
+            if (j < indent || (j - indent) >= row_len) { // in white area
                 pBuf = &white;
             } else { // in contentful area
-                pBuf = pix_buf + ((ix + j) * san_w + (jx - j));
+                pBuf = pix_buf +
+                       ((ix + (j - indent)) * san_w + (jx - (j - indent)));
             }
             fwrite(pBuf, sizeof(struct pix_t), 1, outBmp);
         }
