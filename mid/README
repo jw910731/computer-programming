@@ -12,3 +12,9 @@ Also, `make clean` is supported.
 Run
 -------
 All executable accept no argument and can simply run in POSIX supported systems.
+
+
+mid02
+-------
+The result is a bit funny and I have no time to fix it.
+But it is almost working stuff.
