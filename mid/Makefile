@@ -11,8 +11,8 @@ LDFLAGS=-lm
 #XELATEX=xelatex
 #endif
 #BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
-TARGETS=example
-example_OBJ= example.o
+TARGETS=mid02
+mid02_OBJ= basic.o mid02.o
 
 .PHONY: all
 
