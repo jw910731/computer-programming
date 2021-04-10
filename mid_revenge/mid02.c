@@ -1,8 +1,8 @@
+#include <assert.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
-#include <math.h>
 
 #include "basic.h"
 #include "vec.h"
@@ -41,9 +41,11 @@ struct picture_t {
 };
 
 #define MIN(a, b) ((a < b) ? (a) : (b))
-#define MAX(a, b) ((a > b) : (a) : (b))
+#define MAX(a, b) ((a > b) ? (a) : (b))
 
-inline static void print_vec(struct vec_t v) { printf("(%lf, %lf)\n", v.x, v.y); }
+inline static void print_vec(struct vec_t v) {
+    printf("(%lf, %lf)\n", v.x, v.y);
+}
 
 // Rotate vector relative to mid point
 struct vec_t rotate_vec(const struct picture_t *p, struct vec_t v, fp deg) {
@@ -64,8 +66,26 @@ struct vec_t off_vec_gen(const struct picture_t *pic, fp deg) {
     print_vec(lb);
     print_vec(rt);
     print_vec(rb);
-    return (struct vec_t){ceil(fabs(MIN(rb.x, lt.x))),
-                          ceil(fabs(MIN(lb.y, rt.y)))};
+    return (struct vec_t){ceil(fabs(MIN(MIN(lt.x, lb.x), MIN(rt.x, rb.x)))),
+                          ceil(fabs(MIN(MIN(lt.y, lb.y), MIN(rt.y, rb.y))))};
+}
+
+inline static fp area(struct vec_t a, struct vec_t b, struct vec_t c){
+    return fabs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2.0);
+}
+
+bool ck_Picture(const struct picture_t *pic, i32 x, i32 y, fp deg, const struct vec_t off){
+    const struct vec_t pos = {x, y};
+    struct vec_t pts[4] = {{0, pic->h}, {0, 0}, {pic->w, 0}, {pic->w, pic->h}};
+    for(i32 i = 0 ; i < 4 ; ++i){
+        pts[i] = add(off, rotate_vec(pic, pts[i], deg));
+    }
+    for(i32 i = 0 ; i < 4 ; ++i){
+        if(cross(sub(pts[(i+1)%4], pts[i]), sub(pos, pts[i])) < 0){
+            return false;
+        }
+    }
+    return true;
 }
 
 int main() {
@@ -81,12 +101,11 @@ int main() {
         }
         printf("Rotation angle (int , 0-360): ");
         ret = scanf("%d", &in_deg);
-        if (ret == 1 && (in_deg < 0 || in_deg > 360))
-            ret = 0;
+        if (ret == 1 && (in_deg < 0 || in_deg > 360)) ret = 0;
         while (getchar() != '\n')
             ;
     } while (ret != 1);
-    fp rot_deg = PI * (360 - in_deg) / 180.0;
+    fp rot_deg = PI * in_deg / 180.0;
 
     FILE *inBmp = NULL, *outBmp = NULL;
 
@@ -105,11 +124,11 @@ int main() {
     memcpy(&outHeader, &header, sizeof(header));
 
     // calc info
-    struct picture_t inPic = {.w = abs(header.width),
-                              .h = abs(header.height),
-                              .blob =
-                                  calloc(abs(header.width) * abs(header.height),
-                                         sizeof(struct pix_t))};
+    struct picture_t inPic = {
+        .w = abs(header.width),
+        .h = abs(header.height),
+        .blob = calloc(abs(header.width) * abs(header.height),
+                       sizeof(struct pix_t))};
     i32 ipad_siz = (((24 * inPic.w + 31) / 32) * 4) - (3 * inPic.w);
 
     // read data by row
@@ -120,17 +139,18 @@ int main() {
     }
 
     // calc out bmp info
-    i32 san_oh = ceil(fabs(rotate(sub((struct vec_t){.x = 0, .y = inPic.h},
-                                      (struct vec_t){inPic.w, 0}),
-                                  rot_deg)
-                               .y))+1,
-        san_ow = ceil(fabs(rotate(sub((struct vec_t){.x = 0, .y = 0},
-                                      (struct vec_t){inPic.w, inPic.h}),
-                                  rot_deg)
-                               .x))+1;
-    printf("%d %d\n", san_ow, san_oh);
+    struct vec_t diag[2] = {rotate(sub((struct vec_t){.x = 0, .y = inPic.h},
+                                       (struct vec_t){inPic.w, 0}),
+                                   rot_deg),
+                            rotate(sub((struct vec_t){.x = 0, .y = 0},
+                                       (struct vec_t){inPic.w, inPic.h}),
+                                   rot_deg)};
+    i32 san_oh = ceil(MAX(fabs(diag[0].y), fabs(diag[1].y))) + 1,
+        san_ow = ceil(MAX(fabs(diag[0].x), fabs(diag[1].x))) + 1;
+    printf("ow: %d oh: %d\n", san_ow, san_oh);
     struct vec_t offset_vec = off_vec_gen(&inPic, rot_deg);
-    printf("(%lf, %lf)\n", offset_vec.x, offset_vec.y);
+    fputs("Offset Vector: ", stdout);
+    print_vec(offset_vec);
     struct picture_t outPic = {
         .w = san_ow,
         .h = san_oh,
@@ -138,43 +158,36 @@ int main() {
     // update data to header
     outHeader.width = outPic.w;
     outHeader.height = outPic.h;
-    fwrite(&outHeader, sizeof(outHeader), 1, outBmp);
     // clear whole picture to white
     memset(outPic.blob, 0xff, outPic.w * outPic.h * sizeof(struct pix_t));
 
-    struct subpix_t **subpix_arr = calloc(outPic.h * outPic.w, sizeof(struct subpix_t*));
+    bool *vis_map = calloc(outPic.w * outPic.h, sizeof(bool));
 
     // rotate picture
     for (i32 i = 0; i < inPic.h; ++i) {
         for (i32 j = 0; j < inPic.w; ++j) {
-            struct vec_t rot = add(offset_vec, rotate_vec(&inPic, (struct vec_t){j, i}, rot_deg));
+            struct vec_t rot = add(
+                offset_vec, rotate_vec(&inPic, (struct vec_t){j, i}, rot_deg));
             i32 ix = round(rot.x), iy = round(rot.y);
-            struct subpix_t **l =  &subpix_arr[outPic.w*iy+ix];
-            while(*l != NULL){
-                l = &(*l)->next;
-            }
-            *l = calloc(1, sizeof(struct subpix_t));
-            (*l)->pos = rot; // record position
-            (*l)->p = inPic.blob[inPic.w * i + j]; // copy pixel data
-            (*l)->next = NULL;
+            outPic.blob[outPic.w * iy + ix] = inPic.blob[inPic.w * i + j];
+            vis_map[outPic.w * iy + ix] = true;
         }
     }
-
-    // subpixel
+    // blend the blank pixel
     for(i32 i = 0 ; i < outPic.h ; ++i){
         for(i32 j = 0 ; j < outPic.w ; ++j){
-            const struct subpix_t *l = subpix_arr[outPic.w * i + j];
-            fp sb = 0, sr = 0, sg = 0;
-            i32 cnt = 0;
-            while(l != NULL) {
-                sb += l->p.b;
-                sg += l->p.g;
-                sr += l->p.r;
-                l = l->next;
-                ++cnt;
-            }
-            if(cnt > 0){
-                outPic.blob[outPic.w*i + j] = (struct pix_t){.b = round(sb/cnt), .g = round(sg/cnt), .r = round(sr/cnt)};
+            if(ck_Picture(&inPic, j, i, rot_deg, offset_vec) && !vis_map[outPic.w * i + j]){
+                static const i32 dx[4] = {1, -1, 0, 0}, dy[4] = {0, 0, 1, -1};
+                i32 cnt = 0, sb = 0, sg = 0, sr = 0;
+                for(i32 k = 0 ; k < 4 ; ++k){
+                    if(((i+dx[k]) >= 0 && (i+dx[k]) < outPic.h && j + dy[k] >= 0 && j + dy[k] < outPic.w )|| (outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].b < 3 && outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].r < 3 && outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].g < 3)){
+                        sb += outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].b;
+                        sg += outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].g;
+                        sr += outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].r;
+                        ++cnt;
+                    }
+                }
+                outPic.blob[outPic.w * i + j] = (struct pix_t){.b = sb/cnt, .g = sg / cnt, .r = sr/cnt};
             }
         }
     }
@@ -183,6 +196,8 @@ int main() {
 
     // setup padding
     static const byte padding[4] = {0};
+
+    fwrite(&outHeader, sizeof(outHeader), 1, outBmp);
 
     // write pixel by buf with rotate access
     for (i32 i = 0; i < san_oh; ++i) {
@@ -193,17 +208,7 @@ int main() {
     }
 
     // free resources
-    for(i32 i = 0 ; i < outPic.h ; ++i){
-        for(i32 j = 0 ; j < outPic.w ; ++j){
-            if(subpix_arr[i*outPic.w+j] != NULL){ // not null -> free list
-                for(struct subpix_t *it = subpix_arr[i*outPic.w+j], *tmp ; it != NULL ; it = tmp){
-                    tmp = it->next;
-                    free(it);
-                }
-            }
-        }
-    }
-    free(subpix_arr);
+    free(vis_map);
     free(inPic.blob);
     free(outPic.blob);
     fclose(inBmp);
