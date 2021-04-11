@@ -70,22 +70,33 @@ struct vec_t off_vec_gen(const struct picture_t *pic, fp deg) {
                           ceil(fabs(MIN(MIN(lt.y, lb.y), MIN(rt.y, rb.y))))};
 }
 
-inline static fp area(struct vec_t a, struct vec_t b, struct vec_t c){
-    return fabs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) / 2.0);
+inline static fp area(struct vec_t a, struct vec_t b, struct vec_t c) {
+    return fabs((a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) /
+                2.0);
 }
 
-bool ck_Picture(const struct picture_t *pic, i32 x, i32 y, fp deg, const struct vec_t off){
+bool ck_Picture(const struct picture_t *pic, i32 x, i32 y, fp deg,
+                const struct vec_t off) {
     const struct vec_t pos = {x, y};
     struct vec_t pts[4] = {{0, pic->h}, {0, 0}, {pic->w, 0}, {pic->w, pic->h}};
-    for(i32 i = 0 ; i < 4 ; ++i){
+    for (i32 i = 0; i < 4; ++i) {
         pts[i] = add(off, rotate_vec(pic, pts[i], deg));
     }
-    for(i32 i = 0 ; i < 4 ; ++i){
-        if(cross(sub(pts[(i+1)%4], pts[i]), sub(pos, pts[i])) < 0){
+    for (i32 i = 0; i < 4; ++i) {
+        if (cross(sub(pts[(i + 1) % 4], pts[i]), sub(pos, pts[i])) < 0) {
             return false;
         }
     }
     return true;
+}
+
+#define SQ(a) ((a) * (a))
+fp dist3d(const struct pix_t a, const struct pix_t b) {
+    return sqrt(SQ(a.b - b.b) + SQ(a.g - b.g) + SQ(a.r - b.r));
+}
+
+struct pix_t add3d(const struct pix_t a, const struct pix_t b) {
+    return (struct pix_t){a.b + b.b, a.g + b.g, a.r + b.r};
 }
 
 int main() {
@@ -101,7 +112,8 @@ int main() {
         }
         printf("Rotation angle (int , 0-360): ");
         ret = scanf("%d", &in_deg);
-        if (ret == 1 && (in_deg < 0 || in_deg > 360)) ret = 0;
+        if (ret == 1 && (in_deg < 0 || in_deg > 360))
+            ret = 0;
         while (getchar() != '\n')
             ;
     } while (ret != 1);
@@ -124,11 +136,11 @@ int main() {
     memcpy(&outHeader, &header, sizeof(header));
 
     // calc info
-    struct picture_t inPic = {
-        .w = abs(header.width),
-        .h = abs(header.height),
-        .blob = calloc(abs(header.width) * abs(header.height),
-                       sizeof(struct pix_t))};
+    struct picture_t inPic = {.w = abs(header.width),
+                              .h = abs(header.height),
+                              .blob =
+                                  calloc(abs(header.width) * abs(header.height),
+                                         sizeof(struct pix_t))};
     i32 ipad_siz = (((24 * inPic.w + 31) / 32) * 4) - (3 * inPic.w);
 
     // read data by row
@@ -174,20 +186,45 @@ int main() {
         }
     }
     // blend the blank pixel
-    for(i32 i = 0 ; i < outPic.h ; ++i){
-        for(i32 j = 0 ; j < outPic.w ; ++j){
-            if(ck_Picture(&inPic, j, i, rot_deg, offset_vec) && !vis_map[outPic.w * i + j]){
+    for (i32 i = 0; i < outPic.h; ++i) {
+        for (i32 j = 0; j < outPic.w; ++j) {
+            if (ck_Picture(&inPic, j, i, rot_deg, offset_vec) &&
+                !vis_map[outPic.w * i + j]) {
                 static const i32 dx[4] = {1, -1, 0, 0}, dy[4] = {0, 0, 1, -1};
-                i32 cnt = 0, sb = 0, sg = 0, sr = 0;
-                for(i32 k = 0 ; k < 4 ; ++k){
-                    if(((i+dx[k]) >= 0 && (i+dx[k]) < outPic.h && j + dy[k] >= 0 && j + dy[k] < outPic.w )|| (outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].b < 3 && outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].r < 3 && outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].g < 3)){
-                        sb += outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].b;
-                        sg += outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].g;
-                        sr += outPic.blob[outPic.w * (i+dx[k]) + j + dy[k]].r;
+                // calc average
+                i32 cnt = 0;
+                struct pix_t avg_clr = {0, 0, 0};
+                for (i32 k = 0; k < 4; ++k) {
+                    if (((i + dx[k]) >= 0 && (i + dx[k]) < outPic.h &&
+                         j + dy[k] >= 0 && j + dy[k] < outPic.w) &&
+                        vis_map[outPic.w * (i + dx[k]) + j + dy[k]]) {
+                        avg_clr = add3d(
+                            outPic.blob[outPic.w * (i + dx[k]) + j + dy[k]],
+                            avg_clr);
                         ++cnt;
                     }
                 }
-                outPic.blob[outPic.w * i + j] = (struct pix_t){.b = sb/cnt, .g = sg / cnt, .r = sr/cnt};
+                avg_clr = (struct pix_t){.b = avg_clr.b / cnt,
+                                         .g = avg_clr.g / cnt,
+                                         .r = avg_clr.r / cnt};
+                i32 x, y;
+                fp dist = 65535.0;
+                // get color nearest point
+                for (i32 k = 0; k < 4; ++k) {
+                    if (((i + dx[k]) >= 0 && (i + dx[k]) < outPic.h &&
+                         j + dy[k] >= 0 && j + dy[k] < outPic.w) &&
+                        vis_map[outPic.w * (i + dx[k]) + j + dy[k]]) {
+                        const fp clr_dist = dist3d(
+                            avg_clr,
+                            outPic.blob[outPic.w * (i + dx[k]) + j + dy[k]]);
+                        if (clr_dist < dist) {
+                            dist = clr_dist;
+                            x = j + dy[k];
+                            y = i + dx[k];
+                        }
+                    }
+                }
+                outPic.blob[outPic.w * i + j] = outPic.blob[outPic.w * y + x];
             }
         }
     }
@@ -196,6 +233,10 @@ int main() {
 
     // setup padding
     static const byte padding[4] = {0};
+
+    outHeader.size =
+        outPic.w * outPic.h * sizeof(struct pix_t) + sizeof(header);
+    outHeader.bitmap_size = 0;
 
     fwrite(&outHeader, sizeof(outHeader), 1, outBmp);
 
