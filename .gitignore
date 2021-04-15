@@ -1,7 +1,7 @@
 ## Custom Rule
 hw[0-9][0-9][0-9][0-9]
-obj
-build
+obj/**
+build/**
 ## C
 # gdb & peda
 peda-*.txt
