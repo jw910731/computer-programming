@@ -12,7 +12,7 @@ XELATEX=xelatex
 endif
 BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
 TARGETS=hw0301
-hw0301_OBJ=hw0301.o linenoise.o file_selector.o
+hw0301_OBJ=hw0301.o linenoise.o file_selector.o basic.o
 
 .PHONY: all
 

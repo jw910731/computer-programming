@@ -12,3 +12,8 @@ Also, `make clean` is supported.
 Run
 -------
 All executable accept no argument and can simply run in POSIX supported systems.
+
+hw0301
+-------
+This program had support AUTO FILENAME COMPLETION.
+You could press tab to auto complete the file name.

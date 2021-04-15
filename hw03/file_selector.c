@@ -17,33 +17,38 @@ void file_completion(const char *buf, linenoiseCompletions *lc) {
     // default offset to start from the beginning
     i64 len = 0;
     char *dir_path = "./";
+
+    // not selecting pwd
     if (pos != NULL) {
         len = pos - buf + 1; // len = end_pos + 1
         // extra space for null terminator
         dir_path = calloc(len + 1, sizeof(char));
-        const char *it = buf;
-        for (char *dest = dir_path; it - buf <= len; ++it, ++dest)
-            if (it - buf < len)
-                *dest = *it;
-            else
-                *dest = 0; // add null terminator
+        strncpy(dir_path, buf, len);
+        // add trailing null terminator
+        dir_path[len] = 0;
     }
+    // open dir with dir path
     dir = opendir(dir_path);
     // Dir open failed with an invalid dir path
     if (dir == NULL)
         return;
+    // traverse dir entries
     for (struct dirent *f = readdir(dir); f != NULL; f = readdir(dir)) {
         if (entry_check(f, buf + len)) {
-            if (len > 0) {
+            if (len > 0) { // select non pwd
                 char *suggest =
                     calloc(len + f->d_namlen + (f->d_type == DT_DIR) + 1, 1);
+
+                // concat parent dir name
                 strncpy(suggest, buf, len);
+                // concat entry name
                 strncat(suggest, f->d_name, f->d_namlen);
+                // add trailing slash after dir name
                 if (f->d_type == DT_DIR)
                     strncat(suggest, "/", 1);
                 linenoiseAddCompletion(lc, suggest);
                 free(suggest);
-            } else {
+            } else { // selecting pwd
                 linenoiseAddCompletion(lc, f->d_name);
             }
         }
@@ -51,7 +56,7 @@ void file_completion(const char *buf, linenoiseCompletions *lc) {
 
     // free resource
     closedir(dir);
-    if (len > 0) {
+    if (len > 0) { // free if space is overwritten with dynamic allocated space
         // free allocated space
         free(dir_path);
     }
