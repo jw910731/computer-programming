@@ -64,7 +64,7 @@ int main() {
                 ms = strtol(end + 1, &end, 10);
                 struct timespec t = {m * 60 + s, ms * 1000000}, diff;
                 diff = timediff(prev, t);
-                // nanosleep(&diff, &diff);
+                nanosleep(&diff, &diff);
                 fputs(color[name_idx], stdout);
                 printf("%s: %s\n", clr_name[name_idx], end + 1);
                 fputs(CLR_RST, stdout);
