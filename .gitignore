@@ -2,6 +2,8 @@
 hw[0-9][0-9][0-9][0-9]
 obj/**
 build/**
+*.kdev4
+.kdev4/**
 ## C
 # gdb & peda
 peda-*.txt
