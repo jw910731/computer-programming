@@ -1,6 +1,6 @@
 CC=gcc
 OBJDIR:=$(shell [ -d obj ] || mkdir obj && echo "obj")
-CFLAGS=-Wall -Wextra -std=c11 -I./linenoise
+CFLAGS=-Wall -Wextra -std=c11 -I./linenoise -D_BSD_SOURCE
 LDFLAGS=-lm
 
 # XeLaTeX Settings

@@ -36,13 +36,14 @@ void file_completion(const char *buf, linenoiseCompletions *lc) {
     for (struct dirent *f = readdir(dir); f != NULL; f = readdir(dir)) {
         if (entry_check(f, buf + len)) {
             if (len > 0) { // select non pwd
+                size_t name_siz = strlen(f->d_name);
                 char *suggest =
-                    calloc(len + f->d_namlen + (f->d_type == DT_DIR) + 1, 1);
+                    calloc(len + name_siz + (f->d_type == DT_DIR) + 1, 1);
 
                 // concat parent dir name
                 strncpy(suggest, buf, len);
                 // concat entry name
-                strncat(suggest, f->d_name, f->d_namlen);
+                strncat(suggest, f->d_name, name_siz);
                 // add trailing slash after dir name
                 if (f->d_type == DT_DIR)
                     strncat(suggest, "/", 1);
