@@ -1,6 +1,6 @@
 CC=gcc
 OBJDIR:=$(shell [ -d obj ] || mkdir obj && echo "obj")
-CFLAGS=-Wall -Wextra -std=c11 -I./linenoise -D_BSD_SOURCE
+CFLAGS=-Wall -Wextra -std=c11 -I./linenoise -D_DEFAULT_SOURCE
 LDFLAGS=-lm
 
 # XeLaTeX Settings
@@ -11,8 +11,9 @@ else
 XELATEX=xelatex
 endif
 BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
-TARGETS=hw0301 hw0304
+TARGETS=hw0301 hw0302 hw0304
 hw0301_OBJ=hw0301.o linenoise.o file_selector.o basic.o
+hw0302_OBJ=hw0302.o linenoise.o basic.o file_selector.o
 hw0304_OBJ=hw0304.o basic.o
 
 .PHONY: all
