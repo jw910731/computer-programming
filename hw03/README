@@ -17,3 +17,12 @@ hw0301
 -------
 This program had support AUTO FILENAME COMPLETION.
 You could press tab to auto complete the file name.
+
+hw0302
+-------
+This program also supports auto filename completion.
+
+hw0304
+-------
+The output file is not supported by most of the picture viewer.
+Only chromed based browsers are currently tested to work.
