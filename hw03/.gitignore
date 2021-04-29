@@ -1,3 +1,4 @@
 *.lrc
 *.bmp
 *.csv
+.idea/**
