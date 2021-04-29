@@ -49,7 +49,7 @@ int main() {
     FILE *inFile = NULL, *outFile = NULL;
     char nameBuf[1024];
 
-    printf("Please input the output BMP file name: ");
+    printf("Please input the input BMP file name: ");
     fgets_n(nameBuf, 1024, stdin);
     inFile = fopen(nameBuf, "r");
     if(inFile == NULL){
