@@ -1,0 +1,55 @@
+ \documentclass[a4paper,10pt]{article}
+
+\usepackage{listings}
+\usepackage{xltxtra}
+\usepackage{fontspec} %設定字體
+\usepackage[CheckSingle, CJKmath]{xeCJK}
+\usepackage{color}
+\usepackage[x11names]{xcolor}
+\usepackage{csquotes}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+
+\setCJKmainfont{Noto Serif CJK TC}
+\setromanfont[Mapping=tex-text]{Latin Modern Roman}
+\setsansfont[Mapping=tex-text]{Latin Modern Sans}
+\setmonofont[Mapping=tex-text]{Fira Code}
+
+\lstset{										% Code顯示
+    basicstyle=\footnotesize\ttfamily, 					% the size of the fonts that are used for the code
+    numbers=left,									% where to put the line-numbers
+    numberstyle=\footnotesize,					% the size of the fonts that are used for the line-numbers
+    stepnumber=1,									% the step between two line-numbers. If it's 1, each line  will be numbered
+    numbersep=5pt,									% how far the line-numbers are from the code
+    backgroundcolor=\color{white},				% choose the background color. You must add \usepackage{color}
+    showspaces=false,								% show spaces adding particular underscores
+    showstringspaces=false,						% underline spaces within strings
+    showtabs=false,								% show tabs within strings adding particular underscores
+    frame=false,										% adds a frame around the code
+    tabsize=4,										% sets default tabsize to 2 spaces
+    captionpos=b,									% sets the caption-position to bottom
+    breaklines=true,								% sets automatic line breaking
+    breakatwhitespace=false,						% sets if automatic breaks should only happen at whitespace
+    escapeinside={\%*}{*)},						% if you want to add a comment within your code
+    morekeywords={*},								% if you want to add more keywords to the set
+    keywordstyle=\bfseries\color{Blue1},
+    commentstyle=\itshape\color{Red4},
+    stringstyle=\itshape\color{Green4},
+}
+
+%================================================%
+
+\title{C Programming II\\HW0304\\Writing Assignment Answer}
+\author{作者: 吳文元(jw910731)}
+\date{日期: 2021/05/04}
+
+\begin{document}
+\maketitle
+Alpha 值是指圖片在圖層疊加色彩混合時的權重，類似於透明度的想法，但 alpha 值越大，就越不透明  ，與一般所說的「透明度」相反。 alpha 值越高，圖層疊加時該圖片佔最終輸出的 pixel 色彩的權重就越大，看起來也就越不透明。
+\end{document}

@@ -2,3 +2,5 @@
 *.bmp
 *.csv
 .idea/**
+build/**
+
