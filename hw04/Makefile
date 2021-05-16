@@ -1,7 +1,7 @@
 CC=gcc
 OBJDIR:=$(shell [ -d obj ] || mkdir obj && echo "obj")
 CFLAGS=-Wall -Wextra -std=c11 -D_POSIX_C_SOURCE -D_GNU_SOURCE
-LDFLAGS=
+LDFLAGS=-pthread 
 
 # XeLaTeX Settings
 UNAME_S := $(shell uname -s)
@@ -11,9 +11,9 @@ else
 XELATEX=xelatex
 endif
 BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
-TARGETS=hw0401 hw0402
+TARGETS=hw0402
 hw0401_OBJ=basic.o hw0401.o
-hw0402_OBJ= basic.o hash_map.o obfuscator.o hw0402.o
+hw0402_OBJ= basic.o hash_map.o obfuscator.o hw0402.o unique_string.o
 
 .PHONY: all
 

@@ -1,27 +1,27 @@
 #define LAYER 8
 #define LAY_SIZE 4
-#define MASK(x, n) (((x)&((uint32_t)(0xf) << (LAY_SIZE*(n)))) >> (LAY_SIZE*(n)))
+#define MASK(x, n) \
+    (((x) & ((uint32_t)(0xf) << (LAY_SIZE * (n)))) >> (LAY_SIZE * (n)))
 
 #pragma once
 
 #include <stdint.h>
 #include <stdlib.h>
 
-typedef struct item{
+typedef struct item {
     uint32_t backup_hash;
     char *data;
     struct item *next;
-}Item;
+} Item;
 
 typedef struct {
     // pointer
-    void *t[1<<LAY_SIZE];
-}Entry;
+    void *t[1 << LAY_SIZE];
+} Entry;
 
 typedef struct {
     Entry *e;
-}HashTable;
-
+} HashTable;
 
 HashTable *table_create();
 

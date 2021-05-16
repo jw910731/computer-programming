@@ -5,9 +5,9 @@
 
 #include <stdint.h>
 
-#define PAGE_ROUND(x) ((((x)+4095)/4096)*4096);
+#define PAGE_ROUND(x) ((((x) + 4095) / 4096) * 4096 + 4096);
 
-struct memfd_man{
+struct memfd_man {
     // associated mmap segment
     char *buf;
     // associated file descriptor
@@ -18,7 +18,7 @@ struct memfd_man{
 };
 struct memfd_man *memfdman_free(struct memfd_man *);
 
-struct memfd_man * format_obf(struct memfd_man *mem);
-struct memfd_man * varname_obf(struct memfd_man *mem);
-struct memfd_man * funcname_obf(struct memfd_man *mem);
-struct memfd_man * intliteral_obf(struct memfd_man *mem);
+struct memfd_man *format_obf(struct memfd_man *mem);
+struct memfd_man *varname_obf(struct memfd_man *mem);
+struct memfd_man *funcname_obf(struct memfd_man *mem);
+struct memfd_man *intliteral_obf(struct memfd_man *mem);
