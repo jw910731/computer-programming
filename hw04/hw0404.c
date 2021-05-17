@@ -71,13 +71,19 @@ void dump(FileItem *item, int indent) {
         dump(item->children[i], indent+1);
     }
 }
-int main() {
+int main(int argc, char **argv) {
+    if(argc < 2){
+        fputs("Insufficient argument.\n"
+              "Usage: ./hw0404 <zip file>\n", stderr);
+        return 1;
+    }
     FileItem *root = malloc(sizeof(FileItem));
     root->cap = root->len = 0;
     root->val = strndup("", 10);
     root->children = NULL;
 
-    char filename[8192] = "tttttt.zip";
+    char filename[8192];
+    strncpy(filename, argv[1], 8191);
     int fd = open(filename, O_RDONLY);
     if (fd < 0)  {
         perror("fail to open file:");
