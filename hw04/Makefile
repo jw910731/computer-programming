@@ -11,9 +11,10 @@ else
 XELATEX=xelatex
 endif
 BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
-TARGETS=hw0402
+TARGETS=hw0402 hw0404
 hw0401_OBJ=basic.o hw0401.o
 hw0402_OBJ= basic.o hash_map.o obfuscator.o hw0402.o unique_string.o
+hw0404_OBJ= basic.o hw0404.o
 
 .PHONY: all
 
