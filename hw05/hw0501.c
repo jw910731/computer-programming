@@ -21,6 +21,7 @@ struct option lopts[]= {
         {"enc", 1, NULL, 'e'},
         {"dec", 1, NULL, 'd'},
         {"output", 1, NULL, 'o'},
+        {0, 0, 0, 0,},
 };
 
 void print_help(FILE *f){
