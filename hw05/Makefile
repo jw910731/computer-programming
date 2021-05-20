@@ -1,6 +1,6 @@
 CC=gcc
 OBJDIR:=$(shell [ -d obj ] || mkdir obj && echo "obj")
-CFLAGS=-Wall -Wextra -std=c11
+CFLAGS=-Wall -Wextra -std=c11 -D_POSIX_C_SOURCE=200809L
 LDFLAGS=
 
 # XeLaTeX Settings
@@ -11,8 +11,8 @@ else
 XELATEX=xelatex
 endif
 BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
-TARGETS=example
-example_OBJ= example.o
+TARGETS=hw0501
+hw0501_OBJ=basic.o hw0501.o base64.o
 
 .PHONY: all
 
