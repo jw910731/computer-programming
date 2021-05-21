@@ -24,7 +24,7 @@ void print_help() {
 const struct option lopts[] = {
         /*name, arg, flag, val*/
         {"help", 0, NULL, 'h'},
-        {"size", 2, NULL, 0x100},
+        {"size", 1, NULL, 0x100},
 };
 
 enum program_mode{
@@ -62,11 +62,6 @@ int main(int argc, char **argv){
                 return 0;
             // --size
             case 0x100: {
-                // if argument
-                if(optarg == NULL){
-                    split_size = 1000;
-                    break;
-                }
                 char *end;
                 split_size = (i64)strtoll(optarg, &end, 10);
                 if(*end || split_size < 0){ // numeric conversion error or negative size

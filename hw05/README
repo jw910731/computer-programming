@@ -12,12 +12,3 @@ Also, `make clean` is supported.
 Run
 -------
 All executable accept no argument and can simply run in POSIX supported systems.
-
-hw0402
-------
-This program only support linux kernel version >= 3.17 and is not POSIX compatible.
-It uses memfd to reduce data copy, make it efficient and safe to operate the code.
-
-hw0403
-------
-The return value of myprintf is also implemented, representing the number of character it outputs.
