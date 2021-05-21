@@ -29,6 +29,8 @@ int main(){
     sigaction(SIGINT, &interrupt_handler, NULL);
     i64 prevSum = 0, prevIdle = 0;
     while(1){
+        if (f) fclose(f);
+        f = fopen("/proc/stat", "r");
         static char buf[2048];
         fgets_n(buf, 2048, f);
         if(int_flag){
@@ -49,6 +51,7 @@ int main(){
         }
         double idleFraction = 100 - (idle-prevIdle)*100.0 / (sum-prevSum);
         printf("CPU usage: %.2lf%%\n", idleFraction);
+        fflush(stdout);
         prevIdle = idle;
         prevSum = sum;
         sleep(1);
