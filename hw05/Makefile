@@ -11,8 +11,9 @@ else
 XELATEX=xelatex
 endif
 BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
-TARGETS=hw0501
+TARGETS=hw0501 hw0502
 hw0501_OBJ=basic.o hw0501.o base64.o
+hw0502_OBJ=basic.o hw0502.o
 
 .PHONY: all
 
