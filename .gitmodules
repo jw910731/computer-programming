@@ -1,0 +1,3 @@
+[submodule "hw05/cJSON"]
+	path = hw05/cJSON
+	url = git@github.com:DaveGamble/cJSON.git
