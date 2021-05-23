@@ -119,13 +119,16 @@ int main(int argc, char **argv){
     }
 
     // free resource
+    cJSON_Delete(json);
     free(s.ptr);
+    free(buf);
     curl_easy_cleanup(curl);
     return 0;
 fail_json:
     cJSON_Delete(json);
 fail:
     // free resource
+    free(buf);
     free(s.ptr);
     curl_easy_cleanup(curl);
     return 1;
