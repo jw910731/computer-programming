@@ -12,3 +12,17 @@ Also, `make clean` is supported.
 Run
 -------
 All executable accept no argument and can simply run in POSIX supported systems.
+
+hw0501
+-------
+A base64 encode and decoder. The output is not wrapped as RFC describe. No wrapping is supported.
+
+hw0502
+-------
+The program is capable of capturing the SIGINT and gracefully exit.
+Gracefully exit will print goodbye message and closes opening file.
+
+hw0503
+-------
+The API of DBLP is not the same as the query result on the web page.
+As the result, program output may differ from the search result on their website.
