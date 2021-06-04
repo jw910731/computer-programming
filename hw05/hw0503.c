@@ -73,7 +73,7 @@ int main(int argc, char **argv){
     // perform curl connection
     CURLcode res = curl_easy_perform(curl);
     if(res != CURLE_OK){ // check is data fetch success
-        fprintf("%s: %s\n", "Fail to fetch api data", err_buf);
+        fprintf(stderr, "%s: %s\n", "Fail to fetch api data", err_buf);
         goto fail;
     }
 
@@ -108,7 +108,7 @@ int main(int argc, char **argv){
         }
 
         printf("Paper %02d:\n"
-               "    Title: %s"
+               "    Title: %s\n"
                "    Author: ", i+1, p->title);
         for(i64 j = 0 ; j < p->author_size ; ++j){
             printf("%s%c ", p->authors[j], ",."[j == p->author_size - 1]);
