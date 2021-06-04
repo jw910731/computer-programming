@@ -91,8 +91,12 @@ int main(void){
 \subsection{\#\#範例}
 \begin{lstlisting}[language=c, caption={\#\#範例程式\protect\footnotemark}]
 #include <stdio.h>
+
+#define CAT_INTERNAL(a, b) a##b
+#define CAT(a, b) CAT_INTERNAL(a, b)
+
 #define LAMBDA(return_type, fn_body) \
-    ({ return_type lambda_##__LINE__ fn_body lambda_##__LINE__; })
+    ({ return_type CAT(lambda_, __LINE__) fn_body CAT(lambda_, __LINE__); })
 
 int main() {
     void (*lambda)(int) = LAMBDA(
@@ -104,4 +108,6 @@ int main() {
 \footnotetext{這支程式不符合C語言標準，請使用GCC編譯器並在編譯時加上參數\lstinline{--std=gnu11}}
 
 這支範例是用來實現「匿名函數」的功能，這個 macro 可以原地製造出一個 function pointer，其中為了避免命名衝突，我的函數會命名為\lstinline{lambda_<Line Number>}；為了要達到件事，我用到了\#\#運算子來達成。
+
+其中為了避免\lstinline{__LINE__}巨集因為合併造成沒辦法辨認成行號，因此必須編寫功能性的巨集來包裝\#\#運算子。
 \end{document}
