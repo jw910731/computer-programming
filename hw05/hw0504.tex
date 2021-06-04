@@ -1,0 +1,107 @@
+ \documentclass[a4paper,10pt]{article}
+
+\usepackage{listings}
+\usepackage{xltxtra}
+\usepackage{fontspec} %設定字體
+\usepackage[CheckSingle, CJKmath]{xeCJK}
+\usepackage{color}
+\usepackage[x11names]{xcolor}
+\usepackage{csquotes}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+
+\setCJKmainfont{Noto Serif CJK TC}
+\setromanfont[Mapping=tex-text]{Latin Modern Roman}
+\setsansfont[Mapping=tex-text]{Latin Modern Sans}
+\setmonofont[Mapping=tex-text]{Fira Code}
+
+\lstset{										% Code顯示
+    basicstyle=\footnotesize\ttfamily, 					% the size of the fonts that are used for the code
+    numbers=left,									% where to put the line-numbers
+    numberstyle=\footnotesize,					% the size of the fonts that are used for the line-numbers
+    stepnumber=1,									% the step between two line-numbers. If it's 1, each line  will be numbered
+    numbersep=5pt,									% how far the line-numbers are from the code
+    backgroundcolor=\color{white},				% choose the background color. You must add \usepackage{color}
+    showspaces=false,								% show spaces adding particular underscores
+    showstringspaces=false,						% underline spaces within strings
+    showtabs=false,								% show tabs within strings adding particular underscores
+    frame=false,										% adds a frame around the code
+    tabsize=4,										% sets default tabsize to 2 spaces
+    captionpos=b,									% sets the caption-position to bottom
+    breaklines=true,								% sets automatic line breaking
+    breakatwhitespace=false,						% sets if automatic breaks should only happen at whitespace
+    escapeinside={\%*}{*)},						% if you want to add a comment within your code
+    morekeywords={*},								% if you want to add more keywords to the set
+    keywordstyle=\bfseries\color{Blue1},
+    commentstyle=\itshape\color{Red4},
+    stringstyle=\itshape\color{Green4},
+}
+
+%================================================%
+
+\title{C Programming II\\HW0504\\Writing Assignment Answer}
+\author{作者: 吳文元(jw910731)}
+\date{日期: 2021/06/04}
+
+\begin{document}
+\maketitle
+講到這兩個 operator ，就必須說明 token 。 Token 粗略的可以解釋為程式碼中，帳面上的字，而不是裡面所代表的意思。
+
+比如說我們在程式中寫\lstinline{int a = 10;}，此時\lstinline{a}裡面所代表的意思是他的記憶體位置，而他的token就是a，字面上的a。
+\section{\# operator}
+\begin{lstlisting}[language=c]
+#include <stdio.h>
+#define mkstr(s) #s
+int main(void){       
+    printf(mkstr(geeksforgeeks));
+    return 0;
+}
+\end{lstlisting}
+這支程式中的巨集\lstinline{mkstr}[language=c]會將傳進去的 token 換成字串。
+所以這隻程式會輸出\lstinline{geeksforgeeks}。
+\subsection{\#的範例}
+\begin{lstlisting}[language=c, caption={\#範例程式}]
+#include <stdio.h>
+#define CLR_24_FG(R,G,B) ASCII_ESC"[38;2;"#R ";"#G ";"#B "m"
+#define CLR_24_BG(R,G,B) ASCII_ESC"[48;2;"#R ";"#G ";"#B "m"
+int main() {
+    printf(CLR_24_FG(0, 0, 255) "hello\n"CLR_RST);
+    return 0;
+}
+\end{lstlisting}
+這個範例中，我用\#來將輸入進去的 token 直接換成字串，方便我設定 24 色的終端機色彩文字
+\section{\#\# operator}
+\begin{lstlisting}[language=c, escapeinside={(*}{*)}]
+#include <stdio.h>
+#define concat(a, b) a##b
+int main(void){
+    int xy = 30;
+    printf("%d", concat(x, y)); (*\label{code:concat}*)
+    return 0;
+}
+\end{lstlisting}
+\#\#運算子會將兩個 token 合在一起，這隻程式的第\ref{code:concat}行會被替換成\lstinline{printf("%d", xy);}，因此會輸出30，也就是\lstinline{xy}的值。
+
+\subsection{\#\#範例}
+\begin{lstlisting}[language=c, caption={\#\#範例程式\protect\footnotemark}]
+#include <stdio.h>
+#define LAMBDA(return_type, fn_body) \
+    ({ return_type lambda_##__LINE__ fn_body lambda_##__LINE__; })
+
+int main() {
+    void (*lambda)(int) = LAMBDA(
+        void, (int a) { printf("hello: %d\n", a); });
+    lambda(10);
+    return 0;
+}
+\end{lstlisting}
+\footnotetext{這支程式不符合C語言標準，請使用GCC編譯器並在編譯時加上參數\lstinline{--std=gnu11}}
+
+這支範例是用來實現「匿名函數」的功能，這個 macro 可以原地製造出一個 function pointer，其中為了避免命名衝突，我的函數會命名為\lstinline{lambda_<Line Number>}；為了要達到件事，我用到了\#\#運算子來達成。
+\end{document}
