@@ -11,8 +11,8 @@ else
 XELATEX=xelatex
 endif
 BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
-TARGETS=example
-example_OBJ= example.o
+TARGETS=fin02
+fin02_OBJ= fin02.o basic.o vec.o
 
 .PHONY: all
 
