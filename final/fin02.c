@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
     const fp PI = acos(-1);
     static char *inputFileName = NULL, *outputFileName = NULL;
     i32 in_deg = -1;
-    int c;
+    int c = 0;
     while(c != -1){
         switch((c = getopt_long(argc, argv, "a:i:o:h", lopts, NULL))){
             case 'a': {
@@ -131,7 +131,7 @@ int main(int argc, char **argv) {
                 char *eptr;
                 i32 tmp = (i32) strtol(optarg, &eptr, 10);
                 if (*eptr != 0 || tmp < 0 || tmp >= 180) {
-                    fputs("Invalid angle input.\n", stderr);
+                    fputs("Invalid angle input. (Note that the angle must in [0-180) range (exclude 180, include 0) )\n", stderr);
                     return 1;
                 }
                 in_deg = tmp;
