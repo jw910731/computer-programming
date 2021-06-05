@@ -3,14 +3,6 @@ OBJDIR:=$(shell [ -d obj ] || mkdir obj && echo "obj")
 CFLAGS=-Wall -Wextra -std=c11 $(shell curl-config --cflags)
 LDFLAGS=-lm $(shell curl-config --libs)
 
-# XeLaTeX Settings
-UNAME_S := $(shell uname -s)
-ifeq ($(UNAME_S), Darwin)
-XELATEX=/Library/TeX/texbin/xelatex
-else
-XELATEX=xelatex
-endif
-BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
 TARGETS=fin02 fin03
 fin02_OBJ = fin02.o basic.o vec.o
 fin03_OBJ = fin03.o basic.o
@@ -26,13 +18,6 @@ debug: $(TARGETS)
 
 dev: CFLAGS:=$(CFLAGS) -g -DDEBUG
 dev: $(TARGETS)
-
-doc: example.pdf
-
-example.pdf: example.tex
-	$(XELATEX) $(LATEXFLAGS) -output-directory=$(BUILD_DIR) $<
-	$(XELATEX) $(LATEXFLAGS) -output-directory=$(BUILD_DIR) $<
-	cp $(BUILD_DIR)/*.pdf .
 
 .SECONDEXPANSION:
 $(TARGETS): $$(patsubst %, $(OBJDIR)/%, $$($$@_OBJ))
