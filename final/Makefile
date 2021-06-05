@@ -1,7 +1,7 @@
 CC=gcc
 OBJDIR:=$(shell [ -d obj ] || mkdir obj && echo "obj")
-CFLAGS=-Wall -Wextra -std=c11
-LDFLAGS=-lm 
+CFLAGS=-Wall -Wextra -std=c11 $(shell curl-config --cflags)
+LDFLAGS=-lm $(shell curl-config --libs)
 
 # XeLaTeX Settings
 UNAME_S := $(shell uname -s)
@@ -11,8 +11,9 @@ else
 XELATEX=xelatex
 endif
 BUILD_DIR=$(shell [ -d build ] || mkdir build && echo "build")
-TARGETS=fin02
-fin02_OBJ= fin02.o basic.o vec.o
+TARGETS=fin02 fin03
+fin02_OBJ = fin02.o basic.o vec.o
+fin03_OBJ = fin03.o basic.o
 
 .PHONY: all
 
